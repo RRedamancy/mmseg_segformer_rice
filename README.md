@@ -8,37 +8,38 @@ Rice数据集已经从原始的mask标注格式统一制作成了符合VOC标准
 
 训练使用的config文件为 ‘configs/segformer/my_model_segformer_b1.py’
 
-#### 使用单卡 GPU 训练
+### 前期准备
 
-```shell
-python tools/train.py ${CONFIG_FILE} [可选参数]
-```
+1. 安装好mmseg的0.x版本
+   
+2. 准备数据集。
+   
+   由于mmseg需要的数据集必须是标准标注格式，如coco，voc，ade20k等格式才行，所以需要将我们自己的二值标注数据集转化成标准格式。
+ 
+   这里我选择使用VOC标准格式，尺寸为512*512.真实图像格式为JPG格式，标注的mask二值图像的格式为PNG格式（且二值图像的标签值为0和254）.（不能是255，注意！）
+   
+   我们可以通过运行rice-seg-voc/convert.py来将我们自己的数据集转化为对应格式。
+   
+4. 将数据集置放于正确的位置。
+   
+   第一步：在rice-seg-voc目录下建立如下三个文件夹
+   ![image](https://github.com/RRedamancy/mmseg_segformer_rice/assets/100562008/fe408431-7c8e-46ea-91bf-5125633a91f8)
 
-如果你想用单卡GPU训练我们自己的segformer模型，运行以下代码即可（xxx为自己指定的pth文件保存路径）：
+   第二步：将待测试数据的真实图像放在rice-seg-voc/JPEGImages文件夹中
 
-```shell
-python tools/train.py configs/segformer/my_model_segformer_b1.py --work-dir work_dirs/xxx/
-```
+   第三步：将待测试数据的标签图像放在rice-seg-voc/SegmentationClass文件夹中
 
-#### 使用多卡 GPU 训练
+   第四步：在rice-seg-voc\ImageSets\Segmentation文件夹中放置val.txt文件
 
-```shell
-bash tools/dist_train.sh ${CONFIG_FILE} ${GPUS} [可选参数]
-```
+   注意：val.txt文件中是待测试数据的名称，例如：![image](https://github.com/RRedamancy/mmseg_segformer_rice/assets/100562008/8ed8a288-c59a-4508-814d-6053c954dcea)
 
-可选参数可以为:
+   这样，我们的数据就准备好了。
 
-- `--work-dir ${工作路径}`: 在配置文件里重写工作路径文件夹
-- `--resume-from ${检查点文件}`: 继续使用先前的检查点 (checkpoint) 文件（可以继续训练过程）
-- `--load-from ${检查点文件}`: 从一个检查点 (checkpoint) 文件里加载权重（对另一个任务进行精调）
-- `--deterministic`: 选择此模式会减慢训练速度，但结果易于复现
+5.准备训练好的模型文件（.pth）
 
-如果你想用多卡GPU训练我们自己的segformer模型，运行以下代码即可（这里我用了4卡 ,xxx为自己指定的pth文件保存路径）：
-
-```shell
-bash tools/dist_train.sh configs/segformer/my_model_segformer_b1.py 4 --work-dir work_dirs/xxx/ --deterministic
-```
-
+   模型文件可以自己训练，也可以用我准备好的。
+   将准备好的work_dirs.zip文件在根目录下解压，就可以在根目录下看到一个work——dirs文件夹了，里面存有已经训练好的segformer模型。
+   
 ### 模型的测试和mIoU评估
 例子:
 
