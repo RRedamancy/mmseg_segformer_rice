@@ -57,6 +57,8 @@ Rice数据集已经从原始的mask标注格式统一制作成了符合VOC标准
    python tools/test.py configs/segformer/my_model_segformer_b1.py work_dirs/xxx/iter_4000_best.pth --show-dir show_dirs/xxxxx
    ```
 
+   运行完之后，就可以在根目录的show_dirs文件夹里看到可视化结果了。
+
 1. 测试 segformer 并评估 mIoU
 
    ```shell
