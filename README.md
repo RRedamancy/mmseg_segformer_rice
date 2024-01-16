@@ -1,1 +1,4 @@
 # mmseg_segformer_rice
+本代码基于mmSegmentation 0.x版本分支实现
+其中Segformer部分的代码已经更新成了使用SIERRA上采样的形式
+Rice数据集已经从原始的mask标注格式统一制作成了符合VOC标准的数据集格式，便于直接训练使用
